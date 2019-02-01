@@ -237,6 +237,12 @@ extension CyclomaticComplexityRuleTests {
     ]
 }
 
+extension DeinitRequiredRuleTests {
+    static var allTests: [(String, (DeinitRequiredRuleTests) -> () throws -> Void)] = [
+        ("testWithDefaultConfiguration", testWithDefaultConfiguration)
+    ]
+}
+
 extension DeploymentTargetConfigurationTests {
     static var allTests: [(String, (DeploymentTargetConfigurationTests) -> () throws -> Void)] = [
         ("testAppliesConfigurationFromDictionary", testAppliesConfigurationFromDictionary),
@@ -1550,6 +1556,7 @@ XCTMain([
     testCase(CustomRulesTests.allTests),
     testCase(CyclomaticComplexityConfigurationTests.allTests),
     testCase(CyclomaticComplexityRuleTests.allTests),
+    testCase(DeinitRequiredRuleTests.allTests),
     testCase(DeploymentTargetConfigurationTests.allTests),
     testCase(DeploymentTargetRuleTests.allTests),
     testCase(DisableAllTests.allTests),
