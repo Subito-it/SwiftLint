@@ -85,6 +85,7 @@
 #### Enhancements
 
 * Add `reduce_boolean` rule to prefer simpler constructs over `reduce(Boolean)`.  
+* Add `reduce_boolean` rule to prefer simpler constructs over `reduce(Boolean)`.
   [Xavier Lowmiller](https://github.com/xavierLowmiller)
   [#2675](https://github.com/realm/SwiftLint/issues/2675)
 
