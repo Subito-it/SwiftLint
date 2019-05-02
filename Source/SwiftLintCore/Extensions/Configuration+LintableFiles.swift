@@ -83,8 +83,24 @@ extension Configuration {
         #endif
 
         result.minusSet(Set(excludedPaths))
+
+        let excludeRegExs: [NSRegularExpression] = self.excludedPaths.compactMap { pattern in
+            return try? NSRegularExpression(pattern: pattern, options: .caseInsensitive)
+        }
+
         // swiftlint:disable:next force_cast
-        return result.map { $0 as! String }
+        return result.map { $0 as! String }.filter { path in
+            let range = NSRange(path.startIndex..., in: path)
+            let exclude = excludeRegExs.contains(where: {
+                $0.firstMatch(in: path, options: [], range: range) != nil
+            })
+            
+            if exclude {
+                print("Skip linting regex '\(path)'")
+            }
+            
+            return !exclude
+        }
     }
 
     /// Returns the file paths that are excluded by this configuration using filtering by absolute path prefix.
