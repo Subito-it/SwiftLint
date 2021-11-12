@@ -252,9 +252,9 @@ public struct Configuration {
             $0.bridge().absolutePathRepresentation(rootDirectory: previousBasePath).path(relativeTo: newBasePath)
         }
 
-        excludedPaths = excludedPaths.map {
-            $0.bridge().absolutePathRepresentation(rootDirectory: previousBasePath).path(relativeTo: newBasePath)
-        }
+//        excludedPaths = excludedPaths.map {
+//            $0.bridge().absolutePathRepresentation(rootDirectory: previousBasePath).path(relativeTo: newBasePath)
+//        }
     }
 }
 
