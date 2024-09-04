@@ -43,6 +43,7 @@ extension Configuration {
         ruleList: RuleList = RuleRegistry.shared.list,
         enableAllRules: Bool = false,
         onlyRule: String? = nil,
+        quiet: Bool = false,
         cachePath: String? = nil
     ) throws {
         func defaultStringArray(_ object: Any?) -> [String] { [String].array(of: object) ?? [] }
@@ -99,6 +100,7 @@ extension Configuration {
             indentation: Self.getIndentationLogIfInvalid(from: dict),
             warningThreshold: dict[Key.warningThreshold.rawValue] as? Int,
             reporter: dict[Key.reporter.rawValue] as? String ?? XcodeReporter.identifier,
+            quiet: quiet,
             cachePath: cachePath ?? dict[Key.cachePath.rawValue] as? String,
             pinnedVersion: dict[Key.swiftlintVersion.rawValue].map { ($0 as? String) ?? String(describing: $0) },
             allowZeroLintableFiles: dict[Key.allowZeroLintableFiles.rawValue] as? Bool ?? false,

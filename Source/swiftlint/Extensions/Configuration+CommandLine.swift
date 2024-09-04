@@ -269,6 +269,7 @@ extension Configuration {
             configurationFiles: options.configurationFiles,
             enableAllRules: options.enableAllRules,
             onlyRule: options.onlyRule,
+            quiet: options.quiet,
             cachePath: options.cachePath
         )
     }

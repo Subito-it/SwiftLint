@@ -29,6 +29,9 @@ public struct Configuration {
     /// The identifier for the `Reporter` to use to report style violations.
     public let reporter: String?
 
+    /// Whether or not to suppress all non-error output.
+    public let quiet: Bool
+
     /// The location of the persisted cache to use with this configuration.
     public let cachePath: String?
 
@@ -80,6 +83,7 @@ public struct Configuration {
         indentation: IndentationStyle,
         warningThreshold: Int?,
         reporter: String?,
+        quiet: Bool,
         cachePath: String?,
         allowZeroLintableFiles: Bool,
         strict: Bool,
@@ -94,6 +98,7 @@ public struct Configuration {
         self.indentation = indentation
         self.warningThreshold = warningThreshold
         self.reporter = reporter
+        self.quiet = quiet
         self.cachePath = cachePath
         self.allowZeroLintableFiles = allowZeroLintableFiles
         self.strict = strict
@@ -114,6 +119,7 @@ public struct Configuration {
         warningThreshold = configuration.warningThreshold
         reporter = configuration.reporter
         basedOnCustomConfigurationFiles = configuration.basedOnCustomConfigurationFiles
+        quiet = configuration.quiet
         cachePath = configuration.cachePath
         allowZeroLintableFiles = configuration.allowZeroLintableFiles
         strict = configuration.strict
@@ -138,6 +144,7 @@ public struct Configuration {
     /// - parameter warningThreshold:       The threshold for the number of warnings to tolerate before treating the
     ///                                     lint as having failed.
     /// - parameter reporter:               The identifier for the `Reporter` to use to report style violations.
+    /// - parameter quiet:                  Whether or not to suppress all non-error output.
     /// - parameter cachePath:              The location of the persisted cache to use with this configuration.
     /// - parameter pinnedVersion:          The SwiftLint version defined in this configuration.
     /// - parameter allowZeroLintableFiles: Allow SwiftLint to exit successfully when passed ignored or unlintable
@@ -156,6 +163,7 @@ public struct Configuration {
         indentation: IndentationStyle = .default,
         warningThreshold: Int? = nil,
         reporter: String? = nil,
+        quiet: Bool = false,
         cachePath: String? = nil,
         pinnedVersion: String? = nil,
         allowZeroLintableFiles: Bool = false,
@@ -186,6 +194,7 @@ public struct Configuration {
             indentation: indentation,
             warningThreshold: warningThreshold,
             reporter: reporter,
+            quiet: quiet,
             cachePath: cachePath,
             allowZeroLintableFiles: allowZeroLintableFiles,
             strict: strict,
@@ -211,6 +220,7 @@ public struct Configuration {
         configurationFiles: [String], // No default value here to avoid ambiguous Configuration() initializer
         enableAllRules: Bool = false,
         onlyRule: String? = nil,
+        quiet: Bool = false,
         cachePath: String? = nil,
         ignoreParentAndChildConfigs: Bool = false,
         mockedNetworkResults: [String: String] = [:],
@@ -249,6 +259,7 @@ public struct Configuration {
             let resultingConfiguration = try fileGraph.resultingConfiguration(
                 enableAllRules: enableAllRules,
                 onlyRule: onlyRule,
+                quiet: quiet,
                 cachePath: cachePath
             )
 
@@ -259,7 +270,7 @@ public struct Configuration {
             if case Issue.initialFileNotFound = error, !hasCustomConfigurationFiles {
                 // The initial configuration file wasn't found, but the user didn't explicitly specify one
                 // Don't handle as error. Instead, silently fall back to default.
-                self.init(rulesMode: rulesMode, cachePath: cachePath)
+                self.init(rulesMode: rulesMode, quiet: quiet, cachePath: cachePath)
                 return
             }
             if useDefaultConfigOnFailure ?? !hasCustomConfigurationFiles {
@@ -267,7 +278,7 @@ public struct Configuration {
                 queuedPrintError(
                     "\(Issue.wrap(error: error).errorDescription) – Falling back to default configuration"
                 )
-                self.init(rulesMode: rulesMode, cachePath: cachePath)
+                self.init(rulesMode: rulesMode, quiet: quiet, cachePath: cachePath)
             } else {
                 // Files that were explicitly specified could not be loaded -> fail
                 queuedPrintError(Issue.wrap(error: error).asError.localizedDescription)
@@ -296,6 +307,7 @@ extension Configuration: Hashable {
         hasher.combine(indentation)
         hasher.combine(warningThreshold)
         hasher.combine(reporter)
+        hasher.combine(quiet)
         hasher.combine(allowZeroLintableFiles)
         hasher.combine(strict)
         hasher.combine(baseline)
@@ -315,6 +327,7 @@ extension Configuration: Hashable {
             lhs.reporter == rhs.reporter &&
             lhs.basedOnCustomConfigurationFiles == rhs.basedOnCustomConfigurationFiles &&
             lhs.cachePath == rhs.cachePath &&
+            lhs.quiet == rhs.quiet &&
             lhs.rules == rhs.rules &&
             lhs.fileGraph == rhs.fileGraph &&
             lhs.allowZeroLintableFiles == rhs.allowZeroLintableFiles &&

@@ -23,6 +23,7 @@ extension Configuration {
             indentation: childConfiguration.indentation,
             warningThreshold: mergedWarningTreshold(with: childConfiguration),
             reporter: reporter,
+            quiet: childConfiguration.quiet,
             cachePath: cachePath,
             allowZeroLintableFiles: childConfiguration.allowZeroLintableFiles,
             strict: childConfiguration.strict,

@@ -42,6 +42,7 @@ package extension Configuration {
         internal mutating func resultingConfiguration(
             enableAllRules: Bool,
             onlyRule: String?,
+            quiet: Bool,
             cachePath: String?
         ) throws -> Configuration {
             // Build if needed
@@ -53,6 +54,7 @@ package extension Configuration {
                 configurationData: try validate(),
                 enableAllRules: enableAllRules,
                 onlyRule: onlyRule,
+                quiet: quiet,
                 cachePath: cachePath
             )
         }
@@ -251,6 +253,7 @@ package extension Configuration {
             configurationData: [(configurationDict: [String: Any], rootDirectory: String)],
             enableAllRules: Bool,
             onlyRule: String?,
+            quiet: Bool,
             cachePath: String?
         ) throws -> Configuration {
             // Split into first & remainder; use empty dict for first if the array is empty
@@ -262,6 +265,7 @@ package extension Configuration {
                 dict: firstConfigurationData.configurationDict,
                 enableAllRules: enableAllRules,
                 onlyRule: onlyRule,
+                quiet: quiet,
                 cachePath: cachePath
             )
 
@@ -281,6 +285,7 @@ package extension Configuration {
                     dict: $1.configurationDict,
                     enableAllRules: enableAllRules,
                     onlyRule: onlyRule,
+                    quiet: quiet,
                     cachePath: cachePath
                 )
                 childConfiguration.fileGraph = Self(rootDirectory: $1.rootDirectory)

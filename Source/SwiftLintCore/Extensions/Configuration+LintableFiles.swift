@@ -96,8 +96,8 @@ extension Configuration {
                 $0.firstMatch(in: path, options: [], range: range) != nil
             })
 
-            if exclude {
-                print("Skip linting regex '\(path)'")
+            if exclude, !quiet {
+                queuedPrint("Skip linting regex '\(path)'")
             }
 
             return !exclude
